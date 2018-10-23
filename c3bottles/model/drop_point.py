@@ -63,7 +63,7 @@ class DropPoint(db.Model):
             lng=None,
             level=None,
             time=None,
-            type=None
+            type='bottle'
     ):
         """
         Create a new drop point object.
@@ -414,7 +414,7 @@ class DropPoint(db.Model):
         )
 
     @staticmethod
-    def get_dps_json(type, time=None):
+    def get_dps_json(type='bottle', time=None):
         """
         Get drop points as a JSON string.
 

@@ -1,0 +1,28 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+click = "*"
+flask-shell-ipython = "*"
+pwgen = "*"
+pytest = "*"
+qrcode = "*"
+Babel = "*"
+CairoSVG = "<2.0,>=1.0.22"
+Flask = "*"
+Flask-Babel = "*"
+Flask-Bcrypt = "*"
+Flask-Compress = "*"
+Flask-Login = "*"
+Flask-SQLAlchemy = "*"
+Flask-WTF = "*"
+Pillow = "*"
+"PyPDF2" = "*"
+Werkzeug = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.7"

@@ -8,7 +8,7 @@
 # SQLALCHEMY_DATABASE_URI = "postgresql://username:password@host/database"
 
 # Example SQLAlchemy database URI for SQLite (relative path).
-# SQLALCHEMY_DATABASE_URI = "sqlite:///c3bottles.db"
+SQLALCHEMY_DATABASE_URI = "sqlite:///c3bottles.db"
 
 # The secret key used for signing the session cookie.
 # SECRET_KEY = "changeme"

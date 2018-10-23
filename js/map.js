@@ -3,9 +3,9 @@ const $ = require('jquery');
 const L = require('leaflet');
 const gettext = require('./gettext.js');
 
-const bounds = [[0.0, 0.0], [800.0, 550.0]];
+const bounds = [[0.0, 0.0], [546, 1637]];
 const levels = [[6, '-1'], [7, '0'], [8, '1'], [9, '2']];
-const tile_server = 'https://tiles.34c3.c3nav.de/';
+// const tile_server = 'https://tiles.34c3.c3nav.de/';
 
 global.map = undefined;
 global.current_level = undefined;
@@ -33,121 +33,124 @@ L.GridLayer.include({
 });
 
 // from c3nav: site/static/site/js/c3nav.js
-const LevelControl = L.Control.extend({
-  options: {
-    position: 'bottomright',
-    addClasses: '',
-  },
-
-  onAdd() {
-    this._container = L.DomUtil.create('div', `leaflet-control-levels leaflet-bar ${this.options.addClasses}`);
-    this._tileLayers = {};
-    this._overlayLayers = {};
-    this._levelButtons = {};
-    this.currentLevel = null;
-
-    return this._container;
-  },
-
-  addLevel(id, title) {
-    this._tileLayers[id] = L.tileLayer(`${tile_server + String(id)}/{z}/{x}/{y}.png`, {
-      minZoom: -2,
-      maxZoom: 5,
-      bounds: L.GeoJSON.coordsToLatLngs(bounds),
-      attribution: 'Powered by <a href="https://c3nav.de/">c3nav</a>',
-    });
-    const overlay = L.layerGroup();
-
-    this._overlayLayers[id] = overlay;
-
-    const link = L.DomUtil.create('a', '', this._container);
-
-    link.innerHTML = title;
-    link.level = id;
-    link.href = '#';
-
-    L.DomEvent.on(link, 'mousedown dblclick', L.DomEvent.stopPropagation).on(link, 'click', this._levelClick, this);
-
-    this._levelButtons[id] = link;
-
-    return overlay;
-  },
-
-  setLevel(id) {
-    if (id === this.currentLevel) {
-      return true;
-    }
-    if (this._tileLayers[id] === undefined) {
-      return false;
-    }
-
-    if (this.currentLevel) {
-      this._tileLayers[this.currentLevel].remove();
-      this._overlayLayers[this.currentLevel].remove();
-      L.DomUtil.removeClass(this._levelButtons[this.currentLevel], 'current');
-    }
-    this._tileLayers[id].addTo(map);
-    this._overlayLayers[id].addTo(map);
-    L.DomUtil.addClass(this._levelButtons[id], 'current');
-    this.currentLevel = id;
-
-    return true;
-  },
-
-  _levelClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.setLevel(e.target.level);
-    if (typeof update_hash === 'function') {
-      current_level = e.target.level - 7;
-      update_hash();
-    }
-    redraw_marker();
-  },
-
-  finalize() {
-    const buttons = $(this._container).find('a');
-
-    buttons.addClass('current');
-    buttons.width(buttons.width());
-    buttons.removeClass('current');
-  },
-});
+// const LevelControl = L.Control.extend({
+//   options: {
+//     position: 'bottomright',
+//     addClasses: '',
+//   },
+//
+//   onAdd() {
+//     this._container = L.DomUtil.create('div', `leaflet-control-levels leaflet-bar ${this.options.addClasses}`);
+//     this._tileLayers = {};
+//     this._overlayLayers = {};
+//     this._levelButtons = {};
+//     this.currentLevel = null;
+//
+//     return this._container;
+//   },
+//
+//   addLevel(id, title) {
+//     this._tileLayers[id] = L.tileLayer(`${tile_server + String(id)}/{z}/{x}/{y}.png`, {
+//       minZoom: -2,
+//       maxZoom: 5,
+//       bounds: L.GeoJSON.coordsToLatLngs(bounds),
+//       attribution: 'Powered by <a href="https://c3nav.de/">c3nav</a>',
+//     });
+//     const overlay = L.layerGroup();
+//
+//     this._overlayLayers[id] = overlay;
+//
+//     const link = L.DomUtil.create('a', '', this._container);
+//
+//     link.innerHTML = title;
+//     link.level = id;
+//     link.href = '#';
+//
+//     L.DomEvent.on(link, 'mousedown dblclick', L.DomEvent.stopPropagation).on(link, 'click', this._levelClick, this);
+//
+//     this._levelButtons[id] = link;
+//
+//     return overlay;
+//   },
+//
+//   setLevel(id) {
+//     if (id === this.currentLevel) {
+//       return true;
+//     }
+//     if (this._tileLayers[id] === undefined) {
+//       return false;
+//     }
+//
+//     if (this.currentLevel) {
+//       this._tileLayers[this.currentLevel].remove();
+//       this._overlayLayers[this.currentLevel].remove();
+//       L.DomUtil.removeClass(this._levelButtons[this.currentLevel], 'current');
+//     }
+//     this._tileLayers[id].addTo(map);
+//     this._overlayLayers[id].addTo(map);
+//     L.DomUtil.addClass(this._levelButtons[id], 'current');
+//     this.currentLevel = id;
+//
+//     return true;
+//   },
+//
+//   _levelClick(e) {
+//     e.preventDefault();
+//     e.stopPropagation();
+//     this.setLevel(e.target.level);
+//     if (typeof update_hash === 'function') {
+//       current_level = e.target.level - 7;
+//       update_hash();
+//     }
+//     redraw_marker();
+//   },
+//
+//   finalize() {
+//     const buttons = $(this._container).find('a');
+//
+//     buttons.addClass('current');
+//     buttons.width(buttons.width());
+//     buttons.removeClass('current');
+//   },
+// });
 
 global.set_map_level = function(lvl) {
   if (typeof levels[lvl++] === 'undefined') {
     lvl = 0;
   }
   current_level = lvl - 1;
-  level_control.setLevel(levels[lvl][0]);
+  // level_control.setLevel(levels[lvl][0]);
 };
 
 global.init_map = function() {
   map = L.map('map', {
-    attributionControl: true,
+    // attributionControl: true,
     zoom: 0,
     minZoom: 0,
-    maxZoom: 5,
+    maxZoom: 13,
     crs: L.CRS.Simple,
-    maxBounds: L.GeoJSON.coordsToLatLngs(bounds),
+    // maxBounds: L.GeoJSON.coordsToLatLngs(bounds),
   });
 
-  level_control = new LevelControl().addTo(map);
-  const locationLayers = {};
-
-  for (let l = levels.length - 1; l >= 0; l--) {
-    const level = levels[l];
-    const layerGroup = level_control.addLevel(level[0], level[1]);
-
-    locationLayers[level[0]] = L.layerGroup().addTo(layerGroup);
-  }
-  level_control.finalize();
+  L.imageOverlay('/static/img/privacyweek.png', bounds).addTo(map);
+  map.fitBounds(bounds);
+  //
+  // level_control = new LevelControl().addTo(map);
+  // const locationLayers = {};
+  //
+  // for (let l = levels.length - 1; l >= 0; l--) {
+  //   const level = levels[l];
+  //   const layerGroup = level_control.addLevel(level[0], level[1]);
+  //
+  //   locationLayers[level[0]] = L.layerGroup().addTo(layerGroup);
+  // }
+  // level_control.finalize();
 
   set_map_level(0);
 
-  global.default_map_view = function() {
-    map.fitBounds(bounds);
-  };
+  // global.default_map_view = function() {
+  //   map.fitBounds(bounds);
+  // };
 
   redraw_marker();
 };
@@ -156,7 +159,7 @@ global.get_icon = function(type, pointtype) {
   if (pointtype === 'trashcan') {
     type += '_TRASH';
   }
-  const size = 12;
+  const size = 48;
   let zoom = 6 - (map.getMaxZoom() - map.getZoom());
 
   if (zoom < 1) {
